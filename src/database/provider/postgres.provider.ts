@@ -14,8 +14,9 @@ export const PostgresProvider: Provider = {
             database: config.database,
             username: config.username,
             password: config.password,
-            entities: ['dist/**/*.entity.js', '**/*.entity.js'],
-            synchronize: false,
+            entities: [__dirname + '/../../**/*.entity{.ts,.js}'],
+            migrationsRun: true,
+            migrations: ['dist/migrations/*.js'],
         });
         await postgresDataSource.initialize();
         return postgresDataSource;
