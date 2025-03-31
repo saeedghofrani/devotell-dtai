@@ -1,6 +1,6 @@
 export interface IFirstProvider {
   metadata: IMetadata;
-  jobs: IJob[];
+  jobs: IFirstProviderJob[];
 }
 
 interface IMetadata {
@@ -8,7 +8,7 @@ interface IMetadata {
   timestamp: string;
 }
 
-interface IJob {
+export interface IFirstProviderJob {
   jobId: string;
   title: string;
   details: IDetails;

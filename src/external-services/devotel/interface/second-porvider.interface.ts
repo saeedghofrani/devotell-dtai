@@ -4,16 +4,12 @@ export interface ISecondProvider {
 }
 
 interface IData {
-  jobsList: IJobsList;
+  jobsList: Record<string, ISecondProviderJob>;
 }
 
-interface IJobsList {
-  jobsList: Record<string, IJob>;
-}
-
-interface IJob {
+export interface ISecondProviderJob {
   position: string;
-  location: Location;
+  location: ILocation;
   compensation: ICompensation;
   employer: IEmployer;
   requirements: IRequirements;

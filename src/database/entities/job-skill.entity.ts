@@ -4,9 +4,9 @@ import { JobEntity } from './job.entity';
 
 @Entity({ name: 'job_skills' })
 export class JobSkillEntity extends MainEntity {
-    @Column({ type: 'varchar', length: 150 })
-    skill: string;
+  @Column({ type: 'varchar', length: 150, unique: true })
+  skill: string;
 
-    @ManyToMany(() => JobEntity, jobs => jobs.skills)
-    jobs: JobEntity[];
+  @ManyToMany(() => JobEntity, (jobs) => jobs.skills)
+  jobs: JobEntity[];
 }

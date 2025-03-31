@@ -15,15 +15,15 @@ export class DevotelService implements OnApplicationBootstrap {
   ) {}
 
   public onApplicationBootstrap(): void {
-    this.provider1Url = `${this.devotelConfigService.fullUrl}/provider1/jobs`;
-    this.provider2Url = `${this.devotelConfigService.fullUrl}/provider2/jobs`;
+    this.provider1Url = `${this.devotelConfigService.fullUrl}provider1/jobs`;
+    this.provider2Url = `${this.devotelConfigService.fullUrl}provider2/jobs`;
   }
 
-  public async fetchProvider1Jobs(): Promise<IFirstProvider> {
+  public async fetchFirstProviderJobs(): Promise<IFirstProvider> {
     return this.requestService.get<IFirstProvider>(this.provider1Url);
   }
 
-  public async fetchProvider2Jobs(): Promise<ISecondProvider> {
+  public async fetchSecondProviderJobs(): Promise<ISecondProvider> {
     return this.requestService.get<ISecondProvider>(this.provider2Url);
   }
 }

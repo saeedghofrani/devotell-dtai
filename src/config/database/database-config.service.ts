@@ -5,7 +5,7 @@ import { ConfigService } from '@nestjs/config';
 export class DatabaseConfigService {
   private static instance: DatabaseConfigService;
 
-  public constructor(private configService: ConfigService) { }
+  public constructor(private configService: ConfigService) {}
 
   static getInstance(configService?: ConfigService): DatabaseConfigService {
     if (!this.instance && !configService) {
@@ -16,7 +16,6 @@ export class DatabaseConfigService {
     }
     return this.instance;
   }
-
 
   public get host(): string {
     return this.configService.get<string>('database.host') as string;
