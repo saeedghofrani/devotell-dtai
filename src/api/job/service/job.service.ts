@@ -14,9 +14,9 @@ import { JobRepository } from '../repository/job.repository';
 export class JobService {
   public constructor(
     private readonly jobRepository: JobRepository,
-    private companyService: CompanyService,
-    private locationService: LocationService,
-    private skillService: SkillService,
+    private readonly companyService: CompanyService,
+    private readonly locationService: LocationService,
+    private readonly skillService: SkillService,
   ) {}
 
   public async upsertJob(

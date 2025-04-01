@@ -19,7 +19,7 @@ describe('DatabaseConfigService', () => {
     }).compile();
 
     configService = module.get<ConfigService>(ConfigService);
-    DatabaseConfigService['instance'] = undefined; // Reset singleton before each test
+    DatabaseConfigService['instance'] = undefined;
   });
 
   describe('getInstance()', () => {

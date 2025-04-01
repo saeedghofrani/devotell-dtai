@@ -35,7 +35,7 @@ export class HttpExceptionFilter
       case exception instanceof AxiosError:
         return this.getAxiosErrorStatus(exception);
       case exception instanceof QueryFailedError:
-        return HttpStatus.BAD_REQUEST; // or HttpStatus.CONFLICT for duplicate entries
+        return HttpStatus.BAD_REQUEST;
       case exception instanceof EntityNotFoundError:
         return HttpStatus.NOT_FOUND;
       default:
@@ -62,16 +62,14 @@ export class HttpExceptionFilter
     if (exception instanceof EntityNotFoundError) {
       return this.getEntityNotFoundErrorDetails(exception);
     }
-    return this.getErrorDetails(exception as HttpException);
+    return this.getErrorDetails(exception);
   }
 
   private getQueryFailedErrorDetails(exception: QueryFailedError): {
     errors: object | string;
   } {
-    // Handle specific database errors
     const driverError: any = exception.driverError;
 
-    // Handle unique constraint violations
     if (driverError.code === '23505') {
       return {
         errors: {
@@ -81,7 +79,6 @@ export class HttpExceptionFilter
       };
     }
 
-    // Handle foreign key violations
     if (driverError.code === '23503') {
       return {
         errors: {
@@ -91,14 +88,12 @@ export class HttpExceptionFilter
       };
     }
 
-    // Generic database error
     return {
       errors: 'Database operation failed',
     };
   }
 
   private extractConstraintDetails(driverError: any): string {
-    // Extract meaningful details from the error
     return driverError.detail || driverError.message;
   }
 

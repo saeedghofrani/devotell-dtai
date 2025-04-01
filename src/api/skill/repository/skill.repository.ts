@@ -13,7 +13,8 @@ import { CreateSkillDto } from '../dto/create.dto';
 @Injectable()
 export class SkillRepository extends Repository<JobSkillEntity> {
   constructor(
-    @Inject(DatabaseProviderConstant) private postgresDataSource: DataSource,
+    @Inject(DatabaseProviderConstant)
+    private readonly postgresDataSource: DataSource,
   ) {
     super(JobSkillEntity, postgresDataSource.createEntityManager());
   }

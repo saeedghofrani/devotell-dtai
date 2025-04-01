@@ -41,7 +41,6 @@ function configureApp(
       enableDebugMessages: true,
       disableErrorMessages: false,
       stopAtFirstError: false,
-      // forbidUnknownValues: true,
       whitelist: true,
     }),
   );

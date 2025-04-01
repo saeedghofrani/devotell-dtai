@@ -12,7 +12,6 @@ describe('JobController (e2e)', () => {
   let dataSource: DataSource;
 
   beforeAll(async () => {
-    // Import both AppModule and DatabaseModule so that the DataSource provider is available.
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
     }).compile();
@@ -20,7 +19,6 @@ describe('JobController (e2e)', () => {
     app = moduleFixture.createNestApplication();
     await app.init();
 
-    // Retrieve DataSource via its exported provider token.
     dataSource = moduleFixture.get<DataSource>(DatabaseProviderConstant);
 
     await dataSource.query(`DELETE FROM "_JobToJobSkill"`);
@@ -31,9 +29,7 @@ describe('JobController (e2e)', () => {
   });
 
   afterAll(async () => {
-    // Ensure we close the DataSource if it’s initialized
     const schedulerRegistry = app.get(SchedulerRegistry);
-    // Stop all cron jobs
     schedulerRegistry.getCronJobs().forEach((job, key) => {
       job.stop();
       schedulerRegistry.deleteCronJob(key);
@@ -58,20 +54,16 @@ describe('JobController (e2e)', () => {
   });
 
   beforeEach(async () => {
-    // Insert controlled test data.
-    // Insert a company.
     await dataSource.query(`
       INSERT INTO "companies" (id, name) VALUES (1, 'Tech Corp')
     `);
 
-    // Insert locations.
     await dataSource.query(`
       INSERT INTO "locations" (id, city, state) VALUES
       (1, 'San Francisco', 'California'),
       (2, 'New York', 'New York')
     `);
 
-    // Insert job skills.
     await dataSource.query(`
       INSERT INTO "job_skills" (id, skill) VALUES
       (1, 'JavaScript'),
@@ -79,8 +71,6 @@ describe('JobController (e2e)', () => {
       (3, 'Node.js')
     `);
 
-    // Insert jobs.
-    // Note: Adjust the table/column names to match your schema.
     await dataSource.query(`
       INSERT INTO "jobs"
         (id, position, "minAmount", "maxAmount", remote, "postedDate", "providerId", experience, "salaryRange", "companyId", "locationId")
@@ -90,7 +80,6 @@ describe('JobController (e2e)', () => {
         (3, 'DevOps Specialist', 80000, 110000, true, NOW(), 'provider3', 4, '$80k - $110k', 1, 2)
     `);
 
-    // Map jobs to skills via the join table.
     await dataSource.query(`
       INSERT INTO "_JobToJobSkill" ("jobsId", "jobSkillsId") VALUES
         (1, 1),
@@ -144,9 +133,7 @@ describe('JobController (e2e)', () => {
       .get('/job-offers')
       .query({ minSalary: 95000 })
       .expect(200);
-    console.log(response.body.data);
 
-    // Based on our inserted data, only Job 1 (minAmount: 100000) qualifies.
     expect(response.body.data.length).toBe(1);
     expect(Number(response.body.data[0].minAmount)).toBeGreaterThanOrEqual(
       95000,
@@ -160,7 +147,6 @@ describe('JobController (e2e)', () => {
       .query({ maxSalary: 115000 })
       .expect(200);
 
-    // Based on our data, only Job 3 qualifies (maxAmount: 110000).
     expect(response.body.data.length).toBe(1);
     expect(Number(response.body.data[0].maxAmount)).toBeLessThanOrEqual(115000);
     expect(response.body.meta.itemCount).toBe(1);
@@ -172,7 +158,6 @@ describe('JobController (e2e)', () => {
       .query({ minSalary: 85000, maxSalary: 130000 })
       .expect(200);
 
-    // All 3 jobs qualify with our test data.
     expect(response.body.data.length).toBe(1);
     expect(response.body.meta.itemCount).toBe(1);
   });
@@ -183,7 +168,6 @@ describe('JobController (e2e)', () => {
       .query({ remote: 'true' })
       .expect(200);
 
-    // Jobs with remote true: Job 1 and Job 3.
     expect(response.body.data.length).toBe(3);
     expect(response.body.data.every((job) => job.remote === true)).toBe(false);
     expect(response.body.meta.itemCount).toBe(3);
@@ -195,7 +179,6 @@ describe('JobController (e2e)', () => {
       .query({ page: 1, limit: 2 })
       .expect(200);
 
-    // Ensure returned meta.page and meta.limit are numbers.
     expect(Number(response.body.meta.page)).toBe(1);
     expect(Number(response.body.meta.limit)).toBe(2);
     expect(response.body.data.length).toBe(2);

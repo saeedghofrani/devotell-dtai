@@ -13,7 +13,8 @@ import { DatabaseProviderConstant } from './../../../database/constant/database-
 @Injectable()
 export class JobRepository extends Repository<JobEntity> {
   constructor(
-    @Inject(DatabaseProviderConstant) private postgresDataSource: DataSource,
+    @Inject(DatabaseProviderConstant)
+    private readonly postgresDataSource: DataSource,
   ) {
     super(JobEntity, postgresDataSource.createEntityManager());
   }

@@ -7,7 +7,8 @@ import { CreateCompanyDto } from '../dto/create.dto';
 @Injectable()
 export class CompanyRepository extends Repository<CompanyEntity> {
   constructor(
-    @Inject(DatabaseProviderConstant) private postgresDataSource: DataSource,
+    @Inject(DatabaseProviderConstant)
+    private readonly postgresDataSource: DataSource,
   ) {
     super(CompanyEntity, postgresDataSource.createEntityManager());
   }

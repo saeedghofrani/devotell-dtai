@@ -7,7 +7,8 @@ import { CreateLocationDto } from '../dto/create.dto';
 @Injectable()
 export class LocationRepository extends Repository<LocationEntity> {
   constructor(
-    @Inject(DatabaseProviderConstant) private postgresDataSource: DataSource,
+    @Inject(DatabaseProviderConstant)
+    private readonly postgresDataSource: DataSource,
   ) {
     super(LocationEntity, postgresDataSource.createEntityManager());
   }

@@ -177,66 +177,7 @@ describe('DevotelService', () => {
     expect(requestService.get).toHaveBeenCalledWith(service['provider1Url']);
     expect(result).toEqual(mockFirstProviderData);
   });
-  // it('should return the correct data structure for second provider jobs', async () => {
-  //     const mockSecondProviderData: ISecondProvider = {
-  //         status: 'success',
-  //         data: {
-  //             jobsList: {
-  //                 'job1': {
-  //                     position: 'Software Engineer',
-  //                     location: {
-  //                         city: 'New York',
-  //                         state: 'NY',
-  //                         remote: false
-  //                     },
-  //                     compensation: {
-  //                         min: 80000,
-  //                         max: 120000,
-  //                         currency: 'USD'
-  //                     },
-  //                     employer: {
-  //                         companyName: 'Tech Corp',
-  //                         website: 'https://techcorp.com'
-  //                     },
-  //                     requirements: {
-  //                         experience: 3,
-  //                         technologies: ['JavaScript', 'React', 'Node.js']
-  //                     },
-  //                     datePosted: '2023-05-01'
-  //                 },
-  //                 'job2': {
-  //                     position: 'Data Scientist',
-  //                     location: {
-  //                         city: 'San Francisco',
-  //                         state: 'CA',
-  //                         remote: true
-  //                     },
-  //                     compensation: {
-  //                         min: 100000,
-  //                         max: 150000,
-  //                         currency: 'USD'
-  //                     },
-  //                     employer: {
-  //                         companyName: 'Data Insights Inc',
-  //                         website: 'https://datainsights.com'
-  //                     },
-  //                     requirements: {
-  //                         experience: 5,
-  //                         technologies: ['Python', 'Machine Learning', 'SQL']
-  //                     },
-  //                     datePosted: '2023-05-02'
-  //                 }
-  //             }
-  //         }
-  //     };
 
-  //     jest.spyOn(requestService, 'get').mockResolvedValue(mockSecondProviderData);
-
-  //     const result = await service.fetchSecondProviderJobs();
-
-  //     expect(requestService.get).toHaveBeenCalledWith('http://example.com/provider2/jobs');
-  //     expect(result).toEqual(mockSecondProviderData);
-  // });
   it('should handle empty responses from the first provider', async () => {
     const emptyResponse = {};
     jest.spyOn(requestService, 'get').mockResolvedValue(emptyResponse);
@@ -246,6 +187,7 @@ describe('DevotelService', () => {
     expect(requestService.get).toHaveBeenCalledWith(service['provider1Url']);
     expect(result).toEqual(emptyResponse);
   });
+
   it('should handle empty responses from the second provider', async () => {
     const emptyResponse = {};
     jest.spyOn(requestService, 'get').mockResolvedValue(emptyResponse);

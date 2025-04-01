@@ -7,7 +7,6 @@ describe('CronConfigService', () => {
   let configService: ConfigService;
 
   beforeEach(async () => {
-    // Mock the ConfigService
     const mockConfigService = {
       get: jest.fn().mockImplementation((key: string) => {
         switch (key) {
