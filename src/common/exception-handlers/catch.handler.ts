@@ -4,6 +4,7 @@ import {
   ExceptionFilter,
   HttpException,
   HttpStatus,
+  Logger,
 } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { AxiosError } from 'axios';
@@ -22,6 +23,7 @@ export class HttpExceptionFilter
     const status = this.getHttpStatus(exception);
     const message: { errors: object | string | unknown } =
       this.getErrorMessage(exception);
+    Logger.warn(message, 'Encountered An Error');
     const date = Date.now();
     this.sendResponse(response, status, message.errors, date);
   }
