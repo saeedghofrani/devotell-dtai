@@ -1,18 +1,25 @@
-# Build stage
-FROM node:22.11.0-alpine AS builder
+FROM node:22.11.0-alpine
 
+# Install dependencies
 RUN apk add --no-cache curl
 
+# Create app directory
 WORKDIR /app
 
+# Copy package files
 COPY package.json package-lock.json ./
+
+# Install dependencies
 RUN npm ci
 
+# Copy all source files
 COPY . .
 
+# Build the application
 RUN npm run build
 
-
+# Expose the app port
 EXPOSE 40000
 
-CMD ["node", "dist/main"]
+# Start the application
+CMD ["node", "dist/main.js"]
