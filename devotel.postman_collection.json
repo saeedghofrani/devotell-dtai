@@ -1,0 +1,1722 @@
+{
+	"info": {
+		"_postman_id": "e643ea7e-b150-4b2f-9ae2-f996b68ca45e",
+		"name": "devotel",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "26381141",
+		"_collection_link": "https://bold-crescent-320516.postman.co/workspace/Saeed-Workspace~1cf9ffdc-6980-471f-811a-bb4728256b52/collection/26381141-e643ea7e-b150-4b2f-9ae2-f996b68ca45e?action=share&source=collection_link&creator=26381141"
+	},
+	"item": [
+		{
+			"name": "Job Offer Pagination",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Response status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Data array and its nested objects have the correct structure\", function () {\r",
+							"    const responseData = pm.response.json();\r",
+							"\r",
+							"    pm.expect(responseData.data).to.be.an('array').that.is.not.empty;\r",
+							"    responseData.data.forEach(function (jobOffer) {\r",
+							"        pm.expect(jobOffer).to.have.property('id').that.is.a('number');\r",
+							"        pm.expect(jobOffer).to.have.property('providerId').that.is.a('string');\r",
+							"        pm.expect(jobOffer).to.have.property('jobType').that.is.a('string');\r",
+							"        pm.expect(jobOffer).to.have.property('experience').that.is.a('number');\r",
+							"        pm.expect(jobOffer).to.have.property('position').that.is.a('string');\r",
+							"        pm.expect(jobOffer).to.have.property('remote').that.is.a('boolean');\r",
+							"        pm.expect(jobOffer).to.have.property('salaryRange').that.is.a('string');\r",
+							"        pm.expect(jobOffer).to.have.property('company').that.is.an('object').and.to.have.property('id').that.is.a('number');\r",
+							"        pm.expect(jobOffer.company).to.have.property('name').that.is.a('string');\r",
+							"        pm.expect(jobOffer).to.have.property('location').that.is.an('object').and.to.have.property('id').that.is.a('number');\r",
+							"        pm.expect(jobOffer.location).to.have.property('city').that.is.a('string');\r",
+							"        pm.expect(jobOffer.location).to.have.property('state').that.is.a('string');\r",
+							"        pm.expect(jobOffer).to.have.property('skills').that.is.an('array').and.to.have.lengthOf.at.least(1);\r",
+							"        jobOffer.skills.forEach(function (skill) {\r",
+							"            pm.expect(skill).to.have.property('id').that.is.a('number');\r",
+							"            pm.expect(skill).to.have.property('skill').that.is.a('string');\r",
+							"        });\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Check for specific headers\", function () {\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.exist;\r",
+							"    pm.expect(pm.response.headers.get(\"Content-Length\")).to.exist;\r",
+							"    pm.expect(pm.response.headers.get(\"Cache-Control\")).to.exist;\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Response time is within acceptable range\", function () {\r",
+							"  pm.expect(pm.response.responseTime).to.be.below(500);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:40000/api/v1/job-offers?page=1&limit=5&position=Software&location=NY&minSalary=51000&maxSalary=110000&jobType=Contract&skill=Java",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "40000",
+					"path": [
+						"api",
+						"v1",
+						"job-offers"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "1"
+						},
+						{
+							"key": "limit",
+							"value": "5"
+						},
+						{
+							"key": "position",
+							"value": "Software"
+						},
+						{
+							"key": "location",
+							"value": "NY"
+						},
+						{
+							"key": "minSalary",
+							"value": "51000"
+						},
+						{
+							"key": "maxSalary",
+							"value": "110000"
+						},
+						{
+							"key": "jobType",
+							"value": "Contract"
+						},
+						{
+							"key": "skill",
+							"value": "Java"
+						}
+					]
+				},
+				"description": "### GET /api/v1/job-offers\n\nThis endpoint retrieves a list of job offers based on the provided query parameters.\n\n#### Request Parameters\n\n- `page` (integer): The page number for paginating the results.\n    \n- `limit` (integer): The maximum number of job offers to be returned per page.\n    \n- `position` (string): The desired position for the job.\n    \n- `location` (string): The location where the job is based.\n    \n- `minSalary` (integer): The minimum salary range for the job offers.\n    \n- `maxSalary` (integer): The maximum salary range for the job offers.\n    \n- `jobType` (string): The type of job (e.g., Contract, Full-time, Part-time).\n    \n- `skill` (string): The required skill for the job.\n    \n\n#### Response\n\nThe response is a JSON object with the following schema:\n\n``` json\n{\n  \"data\": [\n    {\n      \"id\": \"integer\",\n      \"providerId\": \"string\",\n      \"jobType\": \"string\",\n      \"experience\": \"integer\",\n      \"position\": \"string\",\n      \"remote\": \"boolean\",\n      \"salaryRange\": \"string\",\n      \"company\": {\n        \"id\": \"integer\",\n        \"name\": \"string\"\n      },\n      \"location\": {\n        \"id\": \"integer\",\n        \"city\": \"string\",\n        \"state\": \"string\"\n      },\n      \"skills\": [\n        {\n          \"id\": \"integer\",\n          \"skill\": \"string\"\n        }\n      }\n    }\n  ],\n  \"meta\": {\n    \"page\": \"integer\",\n    \"limit\": \"integer\",\n    \"itemCount\": \"integer\",\n    \"pageCount\": \"integer\",\n    \"hasPreviousPage\": \"boolean\",\n    \"hasNextPage\": \"boolean\"\n  }\n}\n\n ```\n\nThe `data` array contains job offer objects with details such as ID, provider ID, job type, experience, position, remote availability, salary range, company details, location details, and required skills. The `meta` object provides pagination information including page number, limit, total item count, page count, and flags for previous and next pages."
+			},
+			"response": [
+				{
+					"name": "Page 1 (Default)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:40000/api/v1/job-offers",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "40000",
+							"path": [
+								"api",
+								"v1",
+								"job-offers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "10",
+									"disabled": true
+								},
+								{
+									"key": "position",
+									"value": "Software",
+									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "NY",
+									"disabled": true
+								},
+								{
+									"key": "minSalary",
+									"value": "75000",
+									"disabled": true
+								},
+								{
+									"key": "maxSalary",
+									"value": "118000",
+									"disabled": true
+								},
+								{
+									"key": "jobType",
+									"value": "Contract",
+									"disabled": true
+								},
+								{
+									"key": "skill",
+									"value": "Java",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "default-src 'self';script-src 'self' 'unsafe-inline';object-src 'none';upgrade-insecure-requests;img-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Resource-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Origin-Agent-Cluster",
+							"value": "?1"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "no-referrer"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=31536000; includeSubDomains"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-DNS-Prefetch-Control",
+							"value": "off"
+						},
+						{
+							"key": "X-Download-Options",
+							"value": "noopen"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Permitted-Cross-Domain-Policies",
+							"value": "none"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "4257"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"10a1-bFQq8JlZL/vVYvRQEqPdRej0C2s\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 01 Apr 2025 03:25:03 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"id\": 521,\n            \"providerId\": \"837\",\n            \"jobType\": \"Unknown\",\n            \"experience\": 2,\n            \"position\": \"Software Engineer\",\n            \"remote\": true,\n            \"salaryRange\": \"75,000 USD - 119,000 USD\",\n            \"company\": {\n                \"id\": 590,\n                \"name\": \"BackEnd Solutions\"\n            },\n            \"location\": {\n                \"id\": 586,\n                \"city\": \"Seattle\",\n                \"state\": \"WA\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                },\n                {\n                    \"id\": 1718,\n                    \"skill\": \"Spring Boot\"\n                },\n                {\n                    \"id\": 1719,\n                    \"skill\": \"AWS\"\n                },\n                {\n                    \"id\": 1726,\n                    \"skill\": \"HTML\"\n                },\n                {\n                    \"id\": 1727,\n                    \"skill\": \"CSS\"\n                },\n                {\n                    \"id\": 1728,\n                    \"skill\": \"Vue.js\"\n                }\n            ]\n        },\n        {\n            \"id\": 522,\n            \"providerId\": \"320\",\n            \"jobType\": \"Part-Time\",\n            \"experience\": 0,\n            \"position\": \"Data Scientist\",\n            \"remote\": false,\n            \"salaryRange\": \"$75k - $145k\",\n            \"company\": {\n                \"id\": 592,\n                \"name\": \"DataWorks\"\n            },\n            \"location\": {\n                \"id\": 608,\n                \"city\": \"Austin\",\n                \"state\": \" TX\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                },\n                {\n                    \"id\": 1718,\n                    \"skill\": \"Spring Boot\"\n                },\n                {\n                    \"id\": 1719,\n                    \"skill\": \"AWS\"\n                },\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1724,\n                    \"skill\": \"Node.js\"\n                },\n                {\n                    \"id\": 1725,\n                    \"skill\": \"React\"\n                }\n            ]\n        },\n        {\n            \"id\": 523,\n            \"providerId\": \"657\",\n            \"jobType\": \"Unknown\",\n            \"experience\": 5,\n            \"position\": \"Software Engineer\",\n            \"remote\": true,\n            \"salaryRange\": \"65,000 USD - 104,000 USD\",\n            \"company\": {\n                \"id\": 589,\n                \"name\": \"TechCorp\"\n            },\n            \"location\": {\n                \"id\": 589,\n                \"city\": \"Seattle\",\n                \"state\": \"NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1724,\n                    \"skill\": \"Node.js\"\n                },\n                {\n                    \"id\": 1725,\n                    \"skill\": \"React\"\n                }\n            ]\n        },\n        {\n            \"id\": 524,\n            \"providerId\": \"555\",\n            \"jobType\": \"Unknown\",\n            \"experience\": 2,\n            \"position\": \"Software Engineer\",\n            \"remote\": false,\n            \"salaryRange\": \"52,000 USD - 91,000 USD\",\n            \"company\": {\n                \"id\": 592,\n                \"name\": \"DataWorks\"\n            },\n            \"location\": {\n                \"id\": 588,\n                \"city\": \"San Francisco\",\n                \"state\": \"TX\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1726,\n                    \"skill\": \"HTML\"\n                },\n                {\n                    \"id\": 1727,\n                    \"skill\": \"CSS\"\n                },\n                {\n                    \"id\": 1728,\n                    \"skill\": \"Vue.js\"\n                }\n            ]\n        },\n        {\n            \"id\": 525,\n            \"providerId\": \"650\",\n            \"jobType\": \"Full-Time\",\n            \"experience\": 0,\n            \"position\": \"Frontend Developer\",\n            \"remote\": false,\n            \"salaryRange\": \"$61k - $123k\",\n            \"company\": {\n                \"id\": 590,\n                \"name\": \"BackEnd Solutions\"\n            },\n            \"location\": {\n                \"id\": 620,\n                \"city\": \"San Francisco\",\n                \"state\": \" CA\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1726,\n                    \"skill\": \"HTML\"\n                },\n                {\n                    \"id\": 1727,\n                    \"skill\": \"CSS\"\n                },\n                {\n                    \"id\": 1728,\n                    \"skill\": \"Vue.js\"\n                },\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1724,\n                    \"skill\": \"Node.js\"\n                },\n                {\n                    \"id\": 1725,\n                    \"skill\": \"React\"\n                }\n            ]\n        },\n        {\n            \"id\": 526,\n            \"providerId\": \"78\",\n            \"jobType\": \"Contract\",\n            \"experience\": 0,\n            \"position\": \"Backend Engineer\",\n            \"remote\": false,\n            \"salaryRange\": \"$74k - $109k\",\n            \"company\": {\n                \"id\": 589,\n                \"name\": \"TechCorp\"\n            },\n            \"location\": {\n                \"id\": 611,\n                \"city\": \"New York\",\n                \"state\": \" NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1726,\n                    \"skill\": \"HTML\"\n                },\n                {\n                    \"id\": 1727,\n                    \"skill\": \"CSS\"\n                },\n                {\n                    \"id\": 1728,\n                    \"skill\": \"Vue.js\"\n                },\n                {\n                    \"id\": 1762,\n                    \"skill\": \"Python\"\n                },\n                {\n                    \"id\": 1763,\n                    \"skill\": \"Machine Learning\"\n                },\n                {\n                    \"id\": 1764,\n                    \"skill\": \"SQL\"\n                },\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                },\n                {\n                    \"id\": 1718,\n                    \"skill\": \"Spring Boot\"\n                },\n                {\n                    \"id\": 1719,\n                    \"skill\": \"AWS\"\n                }\n            ]\n        },\n        {\n            \"id\": 527,\n            \"providerId\": \"97\",\n            \"jobType\": \"Unknown\",\n            \"experience\": 4,\n            \"position\": \"Backend Engineer\",\n            \"remote\": true,\n            \"salaryRange\": \"73,000 USD - 81,000 USD\",\n            \"company\": {\n                \"id\": 589,\n                \"name\": \"TechCorp\"\n            },\n            \"location\": {\n                \"id\": 591,\n                \"city\": \"New York\",\n                \"state\": \"NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1724,\n                    \"skill\": \"Node.js\"\n                },\n                {\n                    \"id\": 1725,\n                    \"skill\": \"React\"\n                }\n            ]\n        },\n        {\n            \"id\": 528,\n            \"providerId\": \"611\",\n            \"jobType\": \"Contract\",\n            \"experience\": 0,\n            \"position\": \"Frontend Developer\",\n            \"remote\": false,\n            \"salaryRange\": \"$92k - $136k\",\n            \"company\": {\n                \"id\": 590,\n                \"name\": \"BackEnd Solutions\"\n            },\n            \"location\": {\n                \"id\": 620,\n                \"city\": \"San Francisco\",\n                \"state\": \" CA\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1724,\n                    \"skill\": \"Node.js\"\n                },\n                {\n                    \"id\": 1725,\n                    \"skill\": \"React\"\n                },\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                },\n                {\n                    \"id\": 1718,\n                    \"skill\": \"Spring Boot\"\n                },\n                {\n                    \"id\": 1719,\n                    \"skill\": \"AWS\"\n                }\n            ]\n        },\n        {\n            \"id\": 529,\n            \"providerId\": \"477\",\n            \"jobType\": \"Unknown\",\n            \"experience\": 5,\n            \"position\": \"Backend Engineer\",\n            \"remote\": true,\n            \"salaryRange\": \"71,000 USD - 116,000 USD\",\n            \"company\": {\n                \"id\": 592,\n                \"name\": \"DataWorks\"\n            },\n            \"location\": {\n                \"id\": 591,\n                \"city\": \"New York\",\n                \"state\": \"NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1724,\n                    \"skill\": \"Node.js\"\n                },\n                {\n                    \"id\": 1725,\n                    \"skill\": \"React\"\n                },\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                },\n                {\n                    \"id\": 1718,\n                    \"skill\": \"Spring Boot\"\n                },\n                {\n                    \"id\": 1719,\n                    \"skill\": \"AWS\"\n                }\n            ]\n        },\n        {\n            \"id\": 530,\n            \"providerId\": \"454\",\n            \"jobType\": \"Unknown\",\n            \"experience\": 3,\n            \"position\": \"Backend Engineer\",\n            \"remote\": false,\n            \"salaryRange\": \"74,000 USD - 126,000 USD\",\n            \"company\": {\n                \"id\": 591,\n                \"name\": \"Creative Design Ltd\"\n            },\n            \"location\": {\n                \"id\": 598,\n                \"city\": \"San Francisco\",\n                \"state\": \"NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1724,\n                    \"skill\": \"Node.js\"\n                },\n                {\n                    \"id\": 1725,\n                    \"skill\": \"React\"\n                },\n                {\n                    \"id\": 1762,\n                    \"skill\": \"Python\"\n                },\n                {\n                    \"id\": 1763,\n                    \"skill\": \"Machine Learning\"\n                },\n                {\n                    \"id\": 1764,\n                    \"skill\": \"SQL\"\n                }\n            ]\n        }\n    ],\n    \"meta\": {\n        \"page\": 1,\n        \"limit\": 10,\n        \"itemCount\": 646,\n        \"pageCount\": 65,\n        \"hasPreviousPage\": false,\n        \"hasNextPage\": true\n    }\n}"
+				},
+				{
+					"name": "Page 2 (Limit 2)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:40000/api/v1/job-offers?page=2&limit=1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "40000",
+							"path": [
+								"api",
+								"v1",
+								"job-offers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "1"
+								},
+								{
+									"key": "position",
+									"value": "Software",
+									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "NY",
+									"disabled": true
+								},
+								{
+									"key": "minSalary",
+									"value": "75000",
+									"disabled": true
+								},
+								{
+									"key": "maxSalary",
+									"value": "118000",
+									"disabled": true
+								},
+								{
+									"key": "jobType",
+									"value": "Contract",
+									"disabled": true
+								},
+								{
+									"key": "skill",
+									"value": "Java",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "default-src 'self';script-src 'self' 'unsafe-inline';object-src 'none';upgrade-insecure-requests;img-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Resource-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Origin-Agent-Cluster",
+							"value": "?1"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "no-referrer"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=31536000; includeSubDomains"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-DNS-Prefetch-Control",
+							"value": "off"
+						},
+						{
+							"key": "X-Download-Options",
+							"value": "noopen"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Permitted-Cross-Domain-Policies",
+							"value": "none"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "532"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"214-m+8+ES8C9edfYHm3dZCHeZsnkcM\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 01 Apr 2025 03:27:48 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"id\": 522,\n            \"providerId\": \"320\",\n            \"jobType\": \"Part-Time\",\n            \"experience\": 0,\n            \"position\": \"Data Scientist\",\n            \"remote\": false,\n            \"salaryRange\": \"$75k - $145k\",\n            \"company\": {\n                \"id\": 592,\n                \"name\": \"DataWorks\"\n            },\n            \"location\": {\n                \"id\": 608,\n                \"city\": \"Austin\",\n                \"state\": \" TX\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                },\n                {\n                    \"id\": 1718,\n                    \"skill\": \"Spring Boot\"\n                },\n                {\n                    \"id\": 1719,\n                    \"skill\": \"AWS\"\n                },\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1724,\n                    \"skill\": \"Node.js\"\n                },\n                {\n                    \"id\": 1725,\n                    \"skill\": \"React\"\n                }\n            ]\n        }\n    ],\n    \"meta\": {\n        \"page\": 2,\n        \"limit\": 1,\n        \"itemCount\": 646,\n        \"pageCount\": 646,\n        \"hasPreviousPage\": true,\n        \"hasNextPage\": true\n    }\n}"
+				},
+				{
+					"name": "Filter position (Software)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:40000/api/v1/job-offers?page=2&limit=5&position=Software",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "40000",
+							"path": [
+								"api",
+								"v1",
+								"job-offers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "position",
+									"value": "Software"
+								},
+								{
+									"key": "location",
+									"value": "NY",
+									"disabled": true
+								},
+								{
+									"key": "minSalary",
+									"value": "75000",
+									"disabled": true
+								},
+								{
+									"key": "maxSalary",
+									"value": "118000",
+									"disabled": true
+								},
+								{
+									"key": "jobType",
+									"value": "Contract",
+									"disabled": true
+								},
+								{
+									"key": "skill",
+									"value": "Java",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "default-src 'self';script-src 'self' 'unsafe-inline';object-src 'none';upgrade-insecure-requests;img-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Resource-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Origin-Agent-Cluster",
+							"value": "?1"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "no-referrer"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=31536000; includeSubDomains"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-DNS-Prefetch-Control",
+							"value": "off"
+						},
+						{
+							"key": "X-Download-Options",
+							"value": "noopen"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Permitted-Cross-Domain-Policies",
+							"value": "none"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "456"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"1c8-8vgtaBWZGxKdnaEJXMXwWYvO4kM\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 01 Apr 2025 03:28:27 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"id\": 523,\n            \"providerId\": \"657\",\n            \"jobType\": \"Unknown\",\n            \"experience\": 5,\n            \"position\": \"Software Engineer\",\n            \"remote\": true,\n            \"salaryRange\": \"65,000 USD - 104,000 USD\",\n            \"company\": {\n                \"id\": 589,\n                \"name\": \"TechCorp\"\n            },\n            \"location\": {\n                \"id\": 589,\n                \"city\": \"Seattle\",\n                \"state\": \"NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1724,\n                    \"skill\": \"Node.js\"\n                },\n                {\n                    \"id\": 1725,\n                    \"skill\": \"React\"\n                }\n            ]\n        }\n    ],\n    \"meta\": {\n        \"page\": 2,\n        \"limit\": 1,\n        \"itemCount\": 152,\n        \"pageCount\": 152,\n        \"hasPreviousPage\": true,\n        \"hasNextPage\": true\n    }\n}"
+				},
+				{
+					"name": "Filter location (NY)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:40000/api/v1/job-offers?page=2&limit=5&location=NY",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "40000",
+							"path": [
+								"api",
+								"v1",
+								"job-offers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "position",
+									"value": "Software",
+									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "NY"
+								},
+								{
+									"key": "minSalary",
+									"value": "75000",
+									"disabled": true
+								},
+								{
+									"key": "maxSalary",
+									"value": "118000",
+									"disabled": true
+								},
+								{
+									"key": "jobType",
+									"value": "Contract",
+									"disabled": true
+								},
+								{
+									"key": "skill",
+									"value": "Java",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "default-src 'self';script-src 'self' 'unsafe-inline';object-src 'none';upgrade-insecure-requests;img-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Resource-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Origin-Agent-Cluster",
+							"value": "?1"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "no-referrer"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=31536000; includeSubDomains"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-DNS-Prefetch-Control",
+							"value": "off"
+						},
+						{
+							"key": "X-Download-Options",
+							"value": "noopen"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Permitted-Cross-Domain-Policies",
+							"value": "none"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "2174"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"87e-dFA40RexzWfNGY+46xlsfysb1Fk\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 01 Apr 2025 03:29:42 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"id\": 532,\n            \"providerId\": \"632\",\n            \"jobType\": \"Unknown\",\n            \"experience\": 4,\n            \"position\": \"Software Engineer\",\n            \"remote\": true,\n            \"salaryRange\": \"68,000 USD - 92,000 USD\",\n            \"company\": {\n                \"id\": 591,\n                \"name\": \"Creative Design Ltd\"\n            },\n            \"location\": {\n                \"id\": 591,\n                \"city\": \"New York\",\n                \"state\": \"NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1724,\n                    \"skill\": \"Node.js\"\n                },\n                {\n                    \"id\": 1725,\n                    \"skill\": \"React\"\n                }\n            ]\n        },\n        {\n            \"id\": 545,\n            \"providerId\": \"843\",\n            \"jobType\": \"Full-Time\",\n            \"experience\": 0,\n            \"position\": \"Software Engineer\",\n            \"remote\": false,\n            \"salaryRange\": \"$96k - $131k\",\n            \"company\": {\n                \"id\": 592,\n                \"name\": \"DataWorks\"\n            },\n            \"location\": {\n                \"id\": 611,\n                \"city\": \"New York\",\n                \"state\": \" NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1726,\n                    \"skill\": \"HTML\"\n                },\n                {\n                    \"id\": 1727,\n                    \"skill\": \"CSS\"\n                },\n                {\n                    \"id\": 1728,\n                    \"skill\": \"Vue.js\"\n                },\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1724,\n                    \"skill\": \"Node.js\"\n                },\n                {\n                    \"id\": 1725,\n                    \"skill\": \"React\"\n                }\n            ]\n        },\n        {\n            \"id\": 546,\n            \"providerId\": \"859\",\n            \"jobType\": \"Unknown\",\n            \"experience\": 3,\n            \"position\": \"Data Scientist\",\n            \"remote\": true,\n            \"salaryRange\": \"77,000 USD - 121,000 USD\",\n            \"company\": {\n                \"id\": 589,\n                \"name\": \"TechCorp\"\n            },\n            \"location\": {\n                \"id\": 585,\n                \"city\": \"Austin\",\n                \"state\": \"NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                },\n                {\n                    \"id\": 1718,\n                    \"skill\": \"Spring Boot\"\n                },\n                {\n                    \"id\": 1719,\n                    \"skill\": \"AWS\"\n                },\n                {\n                    \"id\": 1726,\n                    \"skill\": \"HTML\"\n                },\n                {\n                    \"id\": 1727,\n                    \"skill\": \"CSS\"\n                },\n                {\n                    \"id\": 1728,\n                    \"skill\": \"Vue.js\"\n                }\n            ]\n        },\n        {\n            \"id\": 551,\n            \"providerId\": \"415\",\n            \"jobType\": \"Part-Time\",\n            \"experience\": 0,\n            \"position\": \"Backend Engineer\",\n            \"remote\": false,\n            \"salaryRange\": \"$71k - $136k\",\n            \"company\": {\n                \"id\": 590,\n                \"name\": \"BackEnd Solutions\"\n            },\n            \"location\": {\n                \"id\": 611,\n                \"city\": \"New York\",\n                \"state\": \" NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1726,\n                    \"skill\": \"HTML\"\n                },\n                {\n                    \"id\": 1727,\n                    \"skill\": \"CSS\"\n                },\n                {\n                    \"id\": 1728,\n                    \"skill\": \"Vue.js\"\n                },\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1724,\n                    \"skill\": \"Node.js\"\n                },\n                {\n                    \"id\": 1725,\n                    \"skill\": \"React\"\n                },\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                },\n                {\n                    \"id\": 1718,\n                    \"skill\": \"Spring Boot\"\n                },\n                {\n                    \"id\": 1719,\n                    \"skill\": \"AWS\"\n                }\n            ]\n        },\n        {\n            \"id\": 560,\n            \"providerId\": \"80\",\n            \"jobType\": \"Unknown\",\n            \"experience\": 1,\n            \"position\": \"Frontend Developer\",\n            \"remote\": false,\n            \"salaryRange\": \"50,000 USD - 126,000 USD\",\n            \"company\": {\n                \"id\": 590,\n                \"name\": \"BackEnd Solutions\"\n            },\n            \"location\": {\n                \"id\": 585,\n                \"city\": \"Austin\",\n                \"state\": \"NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1762,\n                    \"skill\": \"Python\"\n                },\n                {\n                    \"id\": 1763,\n                    \"skill\": \"Machine Learning\"\n                },\n                {\n                    \"id\": 1764,\n                    \"skill\": \"SQL\"\n                }\n            ]\n        }\n    ],\n    \"meta\": {\n        \"page\": 2,\n        \"limit\": 5,\n        \"itemCount\": 162,\n        \"pageCount\": 33,\n        \"hasPreviousPage\": true,\n        \"hasNextPage\": true\n    }\n}"
+				},
+				{
+					"name": "Filter Salary Range (75000 - 118000)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:40000/api/v1/job-offers?page=2&limit=5&minSalary=75000&maxSalary=118000",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "40000",
+							"path": [
+								"api",
+								"v1",
+								"job-offers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "position",
+									"value": "Software",
+									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "NY",
+									"disabled": true
+								},
+								{
+									"key": "minSalary",
+									"value": "75000"
+								},
+								{
+									"key": "maxSalary",
+									"value": "118000"
+								},
+								{
+									"key": "jobType",
+									"value": "Contract",
+									"disabled": true
+								},
+								{
+									"key": "skill",
+									"value": "Java",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "default-src 'self';script-src 'self' 'unsafe-inline';object-src 'none';upgrade-insecure-requests;img-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Resource-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Origin-Agent-Cluster",
+							"value": "?1"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "no-referrer"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=31536000; includeSubDomains"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-DNS-Prefetch-Control",
+							"value": "off"
+						},
+						{
+							"key": "X-Download-Options",
+							"value": "noopen"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Permitted-Cross-Domain-Policies",
+							"value": "none"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "2270"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"8de-JbJa4IQJqDS25ShHOuLRUtTRBd8\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 01 Apr 2025 03:30:24 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"id\": 594,\n            \"providerId\": \"245\",\n            \"jobType\": \"Full-Time\",\n            \"experience\": 0,\n            \"position\": \"Software Engineer\",\n            \"remote\": false,\n            \"salaryRange\": \"$87k - $116k\",\n            \"company\": {\n                \"id\": 591,\n                \"name\": \"Creative Design Ltd\"\n            },\n            \"location\": {\n                \"id\": 607,\n                \"city\": \"Seattle\",\n                \"state\": \" WA\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                },\n                {\n                    \"id\": 1718,\n                    \"skill\": \"Spring Boot\"\n                },\n                {\n                    \"id\": 1719,\n                    \"skill\": \"AWS\"\n                },\n                {\n                    \"id\": 1726,\n                    \"skill\": \"HTML\"\n                },\n                {\n                    \"id\": 1727,\n                    \"skill\": \"CSS\"\n                },\n                {\n                    \"id\": 1728,\n                    \"skill\": \"Vue.js\"\n                }\n            ]\n        },\n        {\n            \"id\": 597,\n            \"providerId\": \"380\",\n            \"jobType\": \"Full-Time\",\n            \"experience\": 0,\n            \"position\": \"Backend Engineer\",\n            \"remote\": false,\n            \"salaryRange\": \"$84k - $111k\",\n            \"company\": {\n                \"id\": 590,\n                \"name\": \"BackEnd Solutions\"\n            },\n            \"location\": {\n                \"id\": 608,\n                \"city\": \"Austin\",\n                \"state\": \" TX\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1762,\n                    \"skill\": \"Python\"\n                },\n                {\n                    \"id\": 1763,\n                    \"skill\": \"Machine Learning\"\n                },\n                {\n                    \"id\": 1764,\n                    \"skill\": \"SQL\"\n                }\n            ]\n        },\n        {\n            \"id\": 600,\n            \"providerId\": \"742\",\n            \"jobType\": \"Full-Time\",\n            \"experience\": 0,\n            \"position\": \"Software Engineer\",\n            \"remote\": true,\n            \"salaryRange\": \"$89k - $118k\",\n            \"company\": {\n                \"id\": 590,\n                \"name\": \"BackEnd Solutions\"\n            },\n            \"location\": {\n                \"id\": 620,\n                \"city\": \"San Francisco\",\n                \"state\": \" CA\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1762,\n                    \"skill\": \"Python\"\n                },\n                {\n                    \"id\": 1763,\n                    \"skill\": \"Machine Learning\"\n                },\n                {\n                    \"id\": 1764,\n                    \"skill\": \"SQL\"\n                }\n            ]\n        },\n        {\n            \"id\": 610,\n            \"providerId\": \"56\",\n            \"jobType\": \"Full-Time\",\n            \"experience\": 0,\n            \"position\": \"Software Engineer\",\n            \"remote\": false,\n            \"salaryRange\": \"$95k - $100k\",\n            \"company\": {\n                \"id\": 592,\n                \"name\": \"DataWorks\"\n            },\n            \"location\": {\n                \"id\": 611,\n                \"city\": \"New York\",\n                \"state\": \" NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1726,\n                    \"skill\": \"HTML\"\n                },\n                {\n                    \"id\": 1727,\n                    \"skill\": \"CSS\"\n                },\n                {\n                    \"id\": 1728,\n                    \"skill\": \"Vue.js\"\n                },\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1724,\n                    \"skill\": \"Node.js\"\n                },\n                {\n                    \"id\": 1725,\n                    \"skill\": \"React\"\n                },\n                {\n                    \"id\": 1762,\n                    \"skill\": \"Python\"\n                },\n                {\n                    \"id\": 1763,\n                    \"skill\": \"Machine Learning\"\n                },\n                {\n                    \"id\": 1764,\n                    \"skill\": \"SQL\"\n                },\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                },\n                {\n                    \"id\": 1718,\n                    \"skill\": \"Spring Boot\"\n                },\n                {\n                    \"id\": 1719,\n                    \"skill\": \"AWS\"\n                }\n            ]\n        },\n        {\n            \"id\": 626,\n            \"providerId\": \"177\",\n            \"jobType\": \"Unknown\",\n            \"experience\": 1,\n            \"position\": \"Frontend Developer\",\n            \"remote\": false,\n            \"salaryRange\": \"77,000 USD - 117,000 USD\",\n            \"company\": {\n                \"id\": 592,\n                \"name\": \"DataWorks\"\n            },\n            \"location\": {\n                \"id\": 590,\n                \"city\": \"Austin\",\n                \"state\": \"WA\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1762,\n                    \"skill\": \"Python\"\n                },\n                {\n                    \"id\": 1763,\n                    \"skill\": \"Machine Learning\"\n                },\n                {\n                    \"id\": 1764,\n                    \"skill\": \"SQL\"\n                },\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                },\n                {\n                    \"id\": 1718,\n                    \"skill\": \"Spring Boot\"\n                },\n                {\n                    \"id\": 1719,\n                    \"skill\": \"AWS\"\n                }\n            ]\n        }\n    ],\n    \"meta\": {\n        \"page\": 2,\n        \"limit\": 5,\n        \"itemCount\": 92,\n        \"pageCount\": 19,\n        \"hasPreviousPage\": true,\n        \"hasNextPage\": true\n    }\n}"
+				},
+				{
+					"name": "Filter jobType (Contract)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:40000/api/v1/job-offers?page=2&limit=5&jobType=Contract",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "40000",
+							"path": [
+								"api",
+								"v1",
+								"job-offers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "position",
+									"value": "Software",
+									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "NY",
+									"disabled": true
+								},
+								{
+									"key": "minSalary",
+									"value": "75000",
+									"disabled": true
+								},
+								{
+									"key": "maxSalary",
+									"value": "118000",
+									"disabled": true
+								},
+								{
+									"key": "jobType",
+									"value": "Contract"
+								},
+								{
+									"key": "skill",
+									"value": "Java",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "default-src 'self';script-src 'self' 'unsafe-inline';object-src 'none';upgrade-insecure-requests;img-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Resource-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Origin-Agent-Cluster",
+							"value": "?1"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "no-referrer"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=31536000; includeSubDomains"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-DNS-Prefetch-Control",
+							"value": "off"
+						},
+						{
+							"key": "X-Download-Options",
+							"value": "noopen"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Permitted-Cross-Domain-Policies",
+							"value": "none"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1996"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"7cc-Z+QC+bnrhLEUseqI4ZqZ5fs2OjI\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 01 Apr 2025 03:31:25 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"id\": 558,\n            \"providerId\": \"713\",\n            \"jobType\": \"Contract\",\n            \"experience\": 0,\n            \"position\": \"Backend Engineer\",\n            \"remote\": false,\n            \"salaryRange\": \"$63k - $136k\",\n            \"company\": {\n                \"id\": 591,\n                \"name\": \"Creative Design Ltd\"\n            },\n            \"location\": {\n                \"id\": 607,\n                \"city\": \"Seattle\",\n                \"state\": \" WA\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1762,\n                    \"skill\": \"Python\"\n                },\n                {\n                    \"id\": 1763,\n                    \"skill\": \"Machine Learning\"\n                },\n                {\n                    \"id\": 1764,\n                    \"skill\": \"SQL\"\n                },\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                },\n                {\n                    \"id\": 1718,\n                    \"skill\": \"Spring Boot\"\n                },\n                {\n                    \"id\": 1719,\n                    \"skill\": \"AWS\"\n                }\n            ]\n        },\n        {\n            \"id\": 578,\n            \"providerId\": \"372\",\n            \"jobType\": \"Contract\",\n            \"experience\": 0,\n            \"position\": \"Data Scientist\",\n            \"remote\": false,\n            \"salaryRange\": \"$59k - $108k\",\n            \"company\": {\n                \"id\": 591,\n                \"name\": \"Creative Design Ltd\"\n            },\n            \"location\": {\n                \"id\": 620,\n                \"city\": \"San Francisco\",\n                \"state\": \" CA\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                },\n                {\n                    \"id\": 1718,\n                    \"skill\": \"Spring Boot\"\n                },\n                {\n                    \"id\": 1719,\n                    \"skill\": \"AWS\"\n                }\n            ]\n        },\n        {\n            \"id\": 580,\n            \"providerId\": \"505\",\n            \"jobType\": \"Contract\",\n            \"experience\": 0,\n            \"position\": \"Software Engineer\",\n            \"remote\": false,\n            \"salaryRange\": \"$56k - $142k\",\n            \"company\": {\n                \"id\": 591,\n                \"name\": \"Creative Design Ltd\"\n            },\n            \"location\": {\n                \"id\": 620,\n                \"city\": \"San Francisco\",\n                \"state\": \" CA\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1726,\n                    \"skill\": \"HTML\"\n                },\n                {\n                    \"id\": 1727,\n                    \"skill\": \"CSS\"\n                },\n                {\n                    \"id\": 1728,\n                    \"skill\": \"Vue.js\"\n                }\n            ]\n        },\n        {\n            \"id\": 581,\n            \"providerId\": \"448\",\n            \"jobType\": \"Contract\",\n            \"experience\": 0,\n            \"position\": \"Frontend Developer\",\n            \"remote\": false,\n            \"salaryRange\": \"$68k - $142k\",\n            \"company\": {\n                \"id\": 592,\n                \"name\": \"DataWorks\"\n            },\n            \"location\": {\n                \"id\": 608,\n                \"city\": \"Austin\",\n                \"state\": \" TX\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1762,\n                    \"skill\": \"Python\"\n                },\n                {\n                    \"id\": 1763,\n                    \"skill\": \"Machine Learning\"\n                },\n                {\n                    \"id\": 1764,\n                    \"skill\": \"SQL\"\n                },\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1724,\n                    \"skill\": \"Node.js\"\n                },\n                {\n                    \"id\": 1725,\n                    \"skill\": \"React\"\n                }\n            ]\n        },\n        {\n            \"id\": 586,\n            \"providerId\": \"631\",\n            \"jobType\": \"Contract\",\n            \"experience\": 0,\n            \"position\": \"Data Scientist\",\n            \"remote\": false,\n            \"salaryRange\": \"$60k - $129k\",\n            \"company\": {\n                \"id\": 589,\n                \"name\": \"TechCorp\"\n            },\n            \"location\": {\n                \"id\": 607,\n                \"city\": \"Seattle\",\n                \"state\": \" WA\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1724,\n                    \"skill\": \"Node.js\"\n                },\n                {\n                    \"id\": 1725,\n                    \"skill\": \"React\"\n                }\n            ]\n        }\n    ],\n    \"meta\": {\n        \"page\": 2,\n        \"limit\": 5,\n        \"itemCount\": 118,\n        \"pageCount\": 24,\n        \"hasPreviousPage\": true,\n        \"hasNextPage\": true\n    }\n}"
+				},
+				{
+					"name": "Filter skill (Java)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:40000/api/v1/job-offers?page=2&limit=5&skill=Java",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "40000",
+							"path": [
+								"api",
+								"v1",
+								"job-offers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "position",
+									"value": "Software",
+									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "NY",
+									"disabled": true
+								},
+								{
+									"key": "minSalary",
+									"value": "75000",
+									"disabled": true
+								},
+								{
+									"key": "maxSalary",
+									"value": "118000",
+									"disabled": true
+								},
+								{
+									"key": "jobType",
+									"value": "Contract",
+									"disabled": true
+								},
+								{
+									"key": "skill",
+									"value": "Java"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "default-src 'self';script-src 'self' 'unsafe-inline';object-src 'none';upgrade-insecure-requests;img-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Resource-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Origin-Agent-Cluster",
+							"value": "?1"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "no-referrer"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=31536000; includeSubDomains"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-DNS-Prefetch-Control",
+							"value": "off"
+						},
+						{
+							"key": "X-Download-Options",
+							"value": "noopen"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Permitted-Cross-Domain-Policies",
+							"value": "none"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1618"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"652-WuoViDQncjxR35uwlEuEXSkD+nk\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 01 Apr 2025 03:33:48 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"id\": 527,\n            \"providerId\": \"97\",\n            \"jobType\": \"Unknown\",\n            \"experience\": 4,\n            \"position\": \"Backend Engineer\",\n            \"remote\": true,\n            \"salaryRange\": \"73,000 USD - 81,000 USD\",\n            \"company\": {\n                \"id\": 589,\n                \"name\": \"TechCorp\"\n            },\n            \"location\": {\n                \"id\": 591,\n                \"city\": \"New York\",\n                \"state\": \"NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                }\n            ]\n        },\n        {\n            \"id\": 528,\n            \"providerId\": \"611\",\n            \"jobType\": \"Contract\",\n            \"experience\": 0,\n            \"position\": \"Frontend Developer\",\n            \"remote\": false,\n            \"salaryRange\": \"$92k - $136k\",\n            \"company\": {\n                \"id\": 590,\n                \"name\": \"BackEnd Solutions\"\n            },\n            \"location\": {\n                \"id\": 620,\n                \"city\": \"San Francisco\",\n                \"state\": \" CA\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                }\n            ]\n        },\n        {\n            \"id\": 529,\n            \"providerId\": \"477\",\n            \"jobType\": \"Unknown\",\n            \"experience\": 5,\n            \"position\": \"Backend Engineer\",\n            \"remote\": true,\n            \"salaryRange\": \"71,000 USD - 116,000 USD\",\n            \"company\": {\n                \"id\": 592,\n                \"name\": \"DataWorks\"\n            },\n            \"location\": {\n                \"id\": 591,\n                \"city\": \"New York\",\n                \"state\": \"NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                },\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                }\n            ]\n        },\n        {\n            \"id\": 530,\n            \"providerId\": \"454\",\n            \"jobType\": \"Unknown\",\n            \"experience\": 3,\n            \"position\": \"Backend Engineer\",\n            \"remote\": false,\n            \"salaryRange\": \"74,000 USD - 126,000 USD\",\n            \"company\": {\n                \"id\": 591,\n                \"name\": \"Creative Design Ltd\"\n            },\n            \"location\": {\n                \"id\": 598,\n                \"city\": \"San Francisco\",\n                \"state\": \"NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1723,\n                    \"skill\": \"JavaScript\"\n                }\n            ]\n        },\n        {\n            \"id\": 531,\n            \"providerId\": \"34\",\n            \"jobType\": \"Unknown\",\n            \"experience\": 3,\n            \"position\": \"Data Scientist\",\n            \"remote\": true,\n            \"salaryRange\": \"59,000 USD - 126,000 USD\",\n            \"company\": {\n                \"id\": 591,\n                \"name\": \"Creative Design Ltd\"\n            },\n            \"location\": {\n                \"id\": 595,\n                \"city\": \"Austin\",\n                \"state\": \"CA\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                }\n            ]\n        }\n    ],\n    \"meta\": {\n        \"page\": 2,\n        \"limit\": 5,\n        \"itemCount\": 418,\n        \"pageCount\": 84,\n        \"hasPreviousPage\": true,\n        \"hasNextPage\": true\n    }\n}"
+				},
+				{
+					"name": "Error (Invalid Property)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:40000/api/v1/job-offers?pages=2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "40000",
+							"path": [
+								"api",
+								"v1",
+								"job-offers"
+							],
+							"query": [
+								{
+									"key": "pages",
+									"value": "2"
+								},
+								{
+									"key": "limit",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "position",
+									"value": "Software",
+									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "NY",
+									"disabled": true
+								},
+								{
+									"key": "minSalary",
+									"value": "75000",
+									"disabled": true
+								},
+								{
+									"key": "maxSalary",
+									"value": "118000",
+									"disabled": true
+								},
+								{
+									"key": "jobType",
+									"value": "Contract",
+									"disabled": true
+								},
+								{
+									"key": "skill",
+									"value": "Java",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "default-src 'self';script-src 'self' 'unsafe-inline';object-src 'none';upgrade-insecure-requests;img-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Resource-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Origin-Agent-Cluster",
+							"value": "?1"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "no-referrer"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=31536000; includeSubDomains"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-DNS-Prefetch-Control",
+							"value": "off"
+						},
+						{
+							"key": "X-Download-Options",
+							"value": "noopen"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Permitted-Cross-Domain-Policies",
+							"value": "none"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "124"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"7c-6DJe6cVbrZE333BhhIB3XYJHgnw\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 01 Apr 2025 03:34:17 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": {\n        \"message\": [\n            \"property pages should not exist\"\n        ],\n        \"error\": \"Bad Request\",\n        \"statusCode\": 400\n    },\n    \"timestamp\": 1743478457020\n}"
+				},
+				{
+					"name": "Error (Invalid value)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:40000/api/v1/job-offers?page=wewewe",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "40000",
+							"path": [
+								"api",
+								"v1",
+								"job-offers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "wewewe"
+								},
+								{
+									"key": "limit",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "position",
+									"value": "Software",
+									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "NY",
+									"disabled": true
+								},
+								{
+									"key": "minSalary",
+									"value": "75000",
+									"disabled": true
+								},
+								{
+									"key": "maxSalary",
+									"value": "118000",
+									"disabled": true
+								},
+								{
+									"key": "jobType",
+									"value": "Contract",
+									"disabled": true
+								},
+								{
+									"key": "skill",
+									"value": "Java",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "default-src 'self';script-src 'self' 'unsafe-inline';object-src 'none';upgrade-insecure-requests;img-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Resource-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Origin-Agent-Cluster",
+							"value": "?1"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "no-referrer"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=31536000; includeSubDomains"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-DNS-Prefetch-Control",
+							"value": "off"
+						},
+						{
+							"key": "X-Download-Options",
+							"value": "noopen"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Permitted-Cross-Domain-Policies",
+							"value": "none"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "154"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"9a-cHytaKL8WP0SsW19CHmvC42gsFU\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 01 Apr 2025 03:36:53 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": {\n        \"message\": [\n            \"page must be a number conforming to the specified constraints\"\n        ],\n        \"error\": \"Bad Request\",\n        \"statusCode\": 400\n    },\n    \"timestamp\": 1743478613430\n}"
+				},
+				{
+					"name": "Error (Invalid Enum Value)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:40000/api/v1/job-offers?page=1&jobType=3",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "40000",
+							"path": [
+								"api",
+								"v1",
+								"job-offers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "5",
+									"disabled": true
+								},
+								{
+									"key": "position",
+									"value": "Software",
+									"disabled": true
+								},
+								{
+									"key": "location",
+									"value": "NY",
+									"disabled": true
+								},
+								{
+									"key": "minSalary",
+									"value": "75000",
+									"disabled": true
+								},
+								{
+									"key": "maxSalary",
+									"value": "118000",
+									"disabled": true
+								},
+								{
+									"key": "jobType",
+									"value": "3"
+								},
+								{
+									"key": "skill",
+									"value": "Java",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "default-src 'self';script-src 'self' 'unsafe-inline';object-src 'none';upgrade-insecure-requests;img-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Resource-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Origin-Agent-Cluster",
+							"value": "?1"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "no-referrer"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=31536000; includeSubDomains"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-DNS-Prefetch-Control",
+							"value": "off"
+						},
+						{
+							"key": "X-Download-Options",
+							"value": "noopen"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Permitted-Cross-Domain-Policies",
+							"value": "none"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "215"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"d7-fnjtaeeYmfkEjpKljLRblLpEDJY\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 01 Apr 2025 03:44:21 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"statusCode\": 400,\n    \"message\": {\n        \"message\": [\n            \"jobType must be one of the following values: Full-Time, Part-Time, Contract, Remote, Unknown\"\n        ],\n        \"error\": \"Bad Request\",\n        \"statusCode\": 400\n    },\n    \"timestamp\": \"2025-04-01T03:44:21.236Z\"\n}"
+				},
+				{
+					"name": "Filter (ALL)",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:40000/api/v1/job-offers?page=1&limit=5&position=Software&location=NY&minSalary=51000&maxSalary=110000&jobType=Contract&skill=Java",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "40000",
+							"path": [
+								"api",
+								"v1",
+								"job-offers"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								},
+								{
+									"key": "limit",
+									"value": "5"
+								},
+								{
+									"key": "position",
+									"value": "Software"
+								},
+								{
+									"key": "location",
+									"value": "NY"
+								},
+								{
+									"key": "minSalary",
+									"value": "51000"
+								},
+								{
+									"key": "maxSalary",
+									"value": "110000"
+								},
+								{
+									"key": "jobType",
+									"value": "Contract"
+								},
+								{
+									"key": "skill",
+									"value": "Java"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Security-Policy",
+							"value": "default-src 'self';script-src 'self' 'unsafe-inline';object-src 'none';upgrade-insecure-requests;img-src 'self';base-uri 'self';font-src 'self' https: data:;form-action 'self';frame-ancestors 'self';script-src-attr 'none';style-src 'self' https: 'unsafe-inline'"
+						},
+						{
+							"key": "Cross-Origin-Opener-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Cross-Origin-Resource-Policy",
+							"value": "same-origin"
+						},
+						{
+							"key": "Origin-Agent-Cluster",
+							"value": "?1"
+						},
+						{
+							"key": "Referrer-Policy",
+							"value": "no-referrer"
+						},
+						{
+							"key": "Strict-Transport-Security",
+							"value": "max-age=31536000; includeSubDomains"
+						},
+						{
+							"key": "X-Content-Type-Options",
+							"value": "nosniff"
+						},
+						{
+							"key": "X-DNS-Prefetch-Control",
+							"value": "off"
+						},
+						{
+							"key": "X-Download-Options",
+							"value": "noopen"
+						},
+						{
+							"key": "X-Frame-Options",
+							"value": "SAMEORIGIN"
+						},
+						{
+							"key": "X-Permitted-Cross-Domain-Policies",
+							"value": "none"
+						},
+						{
+							"key": "X-XSS-Protection",
+							"value": "0"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "383"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"17f-RRG/pt4MbY11eQyJsKKTIclV5Mw\""
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 01 Apr 2025 03:45:38 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"data\": [\n        {\n            \"id\": 808,\n            \"providerId\": \"857\",\n            \"jobType\": \"Contract\",\n            \"experience\": 0,\n            \"position\": \"Software Engineer\",\n            \"remote\": false,\n            \"salaryRange\": \"$51k - $110k\",\n            \"company\": {\n                \"id\": 592,\n                \"name\": \"DataWorks\"\n            },\n            \"location\": {\n                \"id\": 611,\n                \"city\": \"New York\",\n                \"state\": \" NY\"\n            },\n            \"skills\": [\n                {\n                    \"id\": 1717,\n                    \"skill\": \"Java\"\n                }\n            ]\n        }\n    ],\n    \"meta\": {\n        \"page\": 1,\n        \"limit\": 5,\n        \"itemCount\": 1,\n        \"pageCount\": 1,\n        \"hasPreviousPage\": false,\n        \"hasNextPage\": false\n    }\n}"
+				}
+			]
+		}
+	]
+}
