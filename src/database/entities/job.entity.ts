@@ -1,4 +1,4 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import { Column, Entity, Index, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 import { MainEntity } from '../../common/entities/main.entity';
 import { CompanyEntity } from './company.entity';
 import { JobSkillEntity } from './job-skill.entity';
@@ -20,9 +20,11 @@ export class JobEntity extends MainEntity {
   @Column({ type: 'int', default: 0 })
   experience: number;
 
+  @Index({ fulltext: true })
   @Column({ type: 'varchar', length: 255, nullable: true })
   position: string;
 
+  @Index()
   @Column({ type: 'timestamptz' })
   postedDate: Date;
 

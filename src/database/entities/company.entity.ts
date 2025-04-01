@@ -1,9 +1,11 @@
 import { MainEntity } from './../../common/entities/main.entity';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, Index, OneToMany } from 'typeorm';
 import { JobEntity } from './job.entity';
+
 
 @Entity({ name: 'companies' })
 export class CompanyEntity extends MainEntity {
+  @Index()
   @Column({ type: 'varchar', length: 255, unique: true })
   name: string;
 
