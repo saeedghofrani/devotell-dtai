@@ -17,7 +17,7 @@ export class JobService {
     private companyService: CompanyService,
     private locationService: LocationService,
     private skillService: SkillService,
-  ) { }
+  ) {}
 
   public async upsertJob(
     createJob: CreateJobDto,
@@ -44,7 +44,9 @@ export class JobService {
     return await this.jobRepository.upsertJob(createJob, entityManager);
   }
 
-  public async pagination(filterDto: JobFilterDto): Promise<PageDto<JobEntity>> {
+  public async pagination(
+    filterDto: JobFilterDto,
+  ): Promise<PageDto<JobEntity>> {
     const query = this.jobRepository.buildQuery(filterDto);
     return createPagination(query, filterDto.page, filterDto.limit);
   }

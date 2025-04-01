@@ -33,7 +33,7 @@ export class SkillRepository extends Repository<JobSkillEntity> {
   ): Promise<InsertResult> {
     const repository = entityManager?.getRepository(JobSkillEntity) || this;
     return await repository.upsert(createSkills, {
-      conflictPaths: { skill: true }
+      conflictPaths: { skill: true },
     });
   }
 

@@ -5,6 +5,6 @@ export class PaginationMeta {
     public readonly itemCount: number,
     public readonly pageCount: number,
     public readonly hasPreviousPage: boolean,
-    public readonly hasNextPage: boolean
-  ) { }
+    public readonly hasNextPage: boolean,
+  ) {}
 }

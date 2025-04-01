@@ -116,18 +116,22 @@ export class HttpExceptionFilter
     const httpStatus = exception.response?.status;
     let errorMessage: unknown;
 
-    if (httpStatus && [
-      HttpStatus.BAD_REQUEST,
-      HttpStatus.UNPROCESSABLE_ENTITY,
-      HttpStatus.FORBIDDEN,
-      HttpStatus.UNAUTHORIZED,
-      HttpStatus.CONFLICT,
-      HttpStatus.TOO_MANY_REQUESTS,
-      HttpStatus.NOT_FOUND,
-    ].includes(httpStatus)) {
+    if (
+      httpStatus &&
+      [
+        HttpStatus.BAD_REQUEST,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        HttpStatus.FORBIDDEN,
+        HttpStatus.UNAUTHORIZED,
+        HttpStatus.CONFLICT,
+        HttpStatus.TOO_MANY_REQUESTS,
+        HttpStatus.NOT_FOUND,
+      ].includes(httpStatus)
+    ) {
       errorMessage = exception.response.data;
     } else {
-      errorMessage = 'Sorry! Something went wrong on our end. Please try again later.';
+      errorMessage =
+        'Sorry! Something went wrong on our end. Please try again later.';
     }
 
     return {
@@ -141,18 +145,21 @@ export class HttpExceptionFilter
     const httpStatus = exception.getStatus();
     let errorMessage: object | string;
 
-    if ([
-      HttpStatus.BAD_REQUEST,
-      HttpStatus.UNPROCESSABLE_ENTITY,
-      HttpStatus.FORBIDDEN,
-      HttpStatus.UNAUTHORIZED,
-      HttpStatus.CONFLICT,
-      HttpStatus.TOO_MANY_REQUESTS,
-      HttpStatus.NOT_FOUND,
-    ].includes(httpStatus)) {
+    if (
+      [
+        HttpStatus.BAD_REQUEST,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+        HttpStatus.FORBIDDEN,
+        HttpStatus.UNAUTHORIZED,
+        HttpStatus.CONFLICT,
+        HttpStatus.TOO_MANY_REQUESTS,
+        HttpStatus.NOT_FOUND,
+      ].includes(httpStatus)
+    ) {
       errorMessage = exception.getResponse();
     } else {
-      errorMessage = 'Sorry! Something went wrong on our end. Please try again later.';
+      errorMessage =
+        'Sorry! Something went wrong on our end. Please try again later.';
     }
 
     return {
@@ -169,7 +176,7 @@ export class HttpExceptionFilter
     response.status(status).json({
       statusCode: status,
       message,
-      timestamp: new Date(date).toISOString()
+      timestamp: new Date(date).toISOString(),
     });
   }
 }

@@ -1,4 +1,11 @@
-import { Column, Entity, Index, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+} from 'typeorm';
 import { MainEntity } from '../../common/entities/main.entity';
 import { CompanyEntity } from './company.entity';
 import { JobSkillEntity } from './job-skill.entity';
@@ -43,7 +50,9 @@ export class JobEntity extends MainEntity {
   @Column({ type: 'varchar', length: 100, nullable: false })
   salaryRange: string;
 
-  @ManyToOne(() => CompanyEntity, (company) => company.jobs, { onDelete: 'CASCADE' })
+  @ManyToOne(() => CompanyEntity, (company) => company.jobs, {
+    onDelete: 'CASCADE',
+  })
   company: CompanyEntity;
 
   @ManyToOne(() => LocationEntity, (location) => location.jobs)

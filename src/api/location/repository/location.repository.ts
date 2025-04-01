@@ -24,7 +24,7 @@ export class LocationRepository extends Repository<LocationEntity> {
         state: createLocation.state,
       },
       {
-        conflictPaths: { city: true, country: true, state: true }
+        conflictPaths: { city: true, country: true, state: true },
       },
     );
   }

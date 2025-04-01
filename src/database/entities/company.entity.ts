@@ -2,7 +2,6 @@ import { MainEntity } from './../../common/entities/main.entity';
 import { Column, Entity, Index, OneToMany } from 'typeorm';
 import { JobEntity } from './job.entity';
 
-
 @Entity({ name: 'companies' })
 export class CompanyEntity extends MainEntity {
   @Index()

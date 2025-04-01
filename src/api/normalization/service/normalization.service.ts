@@ -12,7 +12,7 @@ import { formatCompensation } from './../../../tools/format-thousand';
 
 @Injectable()
 export class NormalizationService {
-  public constructor() { }
+  public constructor() {}
 
   public normalizeFirstProvider(
     firstProviderJob: IFirstProviderJob,
@@ -37,7 +37,7 @@ export class NormalizationService {
 
     const providerId = firstProviderJob.jobId?.split('-').pop();
     if (!firstProviderJob.details.salaryRange) {
-      throw new BadRequestException('Salary range is required')
+      throw new BadRequestException('Salary range is required');
     }
     const [minAmount, maxAmount] = firstProviderJob.details?.salaryRange
       ?.match(/\$(\d+)k/g)

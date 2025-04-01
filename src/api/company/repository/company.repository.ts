@@ -24,7 +24,7 @@ export class CompanyRepository extends Repository<CompanyEntity> {
         website: createCompany.website,
       },
       {
-        conflictPaths: { name: true }
+        conflictPaths: { name: true },
       },
     );
   }

@@ -21,7 +21,7 @@ export class JobSyncService {
     private readonly companyService: CompanyService,
     private readonly locationService: LocationService,
     private readonly skillService: SkillService,
-  ) { }
+  ) {}
 
   public async syncFirstProviderJobs(provider: IFirstProvider): Promise<void> {
     await Promise.all(

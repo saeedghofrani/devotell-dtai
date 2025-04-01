@@ -51,29 +51,35 @@ describe('RequestService', () => {
 
       (httpService.request as jest.Mock).mockReturnValue(of(mockResponse));
 
-      const result = await service.request<{ success: boolean; }>({
+      const result = await service.request<{ success: boolean }>({
         url: 'https://api.example.com',
         method: 'GET',
       });
 
       expect(result).toEqual({ success: true });
     });
-
   });
 
   describe('get', () => {
     it('should call request with GET method', async () => {
-      const spy = jest.spyOn(service, 'request').mockResolvedValue({ data: 'test' });
+      const spy = jest
+        .spyOn(service, 'request')
+        .mockResolvedValue({ data: 'test' });
 
       await service.get('https://api.example.com');
 
-      expect(spy).toHaveBeenCalledWith({ url: 'https://api.example.com', method: 'GET' });
+      expect(spy).toHaveBeenCalledWith({
+        url: 'https://api.example.com',
+        method: 'GET',
+      });
     });
   });
 
   describe('post', () => {
     it('should call request with POST method and data', async () => {
-      const spy = jest.spyOn(service, 'request').mockResolvedValue({ data: 'test' });
+      const spy = jest
+        .spyOn(service, 'request')
+        .mockResolvedValue({ data: 'test' });
 
       await service.post('https://api.example.com', { key: 'value' });
 
@@ -87,7 +93,9 @@ describe('RequestService', () => {
 
   describe('put', () => {
     it('should call request with PUT method and data', async () => {
-      const spy = jest.spyOn(service, 'request').mockResolvedValue({ data: 'test' });
+      const spy = jest
+        .spyOn(service, 'request')
+        .mockResolvedValue({ data: 'test' });
 
       await service.put('https://api.example.com', { key: 'value' });
 
@@ -101,11 +109,16 @@ describe('RequestService', () => {
 
   describe('delete', () => {
     it('should call request with DELETE method', async () => {
-      const spy = jest.spyOn(service, 'request').mockResolvedValue({ data: 'test' });
+      const spy = jest
+        .spyOn(service, 'request')
+        .mockResolvedValue({ data: 'test' });
 
       await service.delete('https://api.example.com');
 
-      expect(spy).toHaveBeenCalledWith({ url: 'https://api.example.com', method: 'DELETE' });
+      expect(spy).toHaveBeenCalledWith({
+        url: 'https://api.example.com',
+        method: 'DELETE',
+      });
     });
   });
 });

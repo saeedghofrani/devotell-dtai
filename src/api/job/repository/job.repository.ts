@@ -1,6 +1,11 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { JobEntity } from './../../../database/entities/job.entity';
-import { DataSource, EntityManager, Repository, SelectQueryBuilder } from 'typeorm';
+import {
+  DataSource,
+  EntityManager,
+  Repository,
+  SelectQueryBuilder,
+} from 'typeorm';
 import { CreateJobDto } from '../dto/create.dto';
 import { JobFilterDto } from '../dto/filter.dto';
 import { DatabaseProviderConstant } from './../../../database/constant/database-provider.constant';
@@ -21,7 +26,7 @@ export class JobRepository extends Repository<JobEntity> {
 
     const existingJob = await repository.findOne({
       where: { providerId: createJob.providerId },
-      relations: ['skills']
+      relations: ['skills'],
     });
 
     let job: JobEntity;
@@ -31,11 +36,10 @@ export class JobRepository extends Repository<JobEntity> {
       repository.merge(existingJob, {
         ...createJob,
         id: existingJob.id,
-        skills: createJob.skills
+        skills: createJob.skills,
       });
       job = existingJob;
-    } else
-      job = repository.create(createJob);
+    } else job = repository.create(createJob);
 
     return await repository.save(job);
   }
@@ -66,37 +70,40 @@ export class JobRepository extends Repository<JobEntity> {
 
     if (filterDto.position) {
       query.andWhere('job.position ILIKE :position', {
-        position: `%${filterDto.position}%`
+        position: `%${filterDto.position}%`,
       });
     }
 
     if (filterDto.location) {
-      query.andWhere('(location.city ILIKE :location OR location.state ILIKE :location)', {
-        location: `%${filterDto.location}%`
-      });
+      query.andWhere(
+        '(location.city ILIKE :location OR location.state ILIKE :location)',
+        {
+          location: `%${filterDto.location}%`,
+        },
+      );
     }
 
     if (filterDto.minSalary) {
       query.andWhere('job.minAmount >= :minSalary', {
-        minSalary: filterDto.minSalary
+        minSalary: filterDto.minSalary,
       });
     }
 
     if (filterDto.maxSalary) {
       query.andWhere('job.maxAmount <= :maxSalary', {
-        maxSalary: filterDto.maxSalary
+        maxSalary: filterDto.maxSalary,
       });
     }
 
     if (filterDto.jobType) {
       query.andWhere('job.jobType = :jobType', {
-        jobType: filterDto.jobType
+        jobType: filterDto.jobType,
       });
     }
 
     if (filterDto.skill) {
       query.andWhere('skills.skill ILIKE :skill', {
-        skill: `%${filterDto.skill}%`
+        skill: `%${filterDto.skill}%`,
       });
     }
 

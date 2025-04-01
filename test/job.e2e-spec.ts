@@ -50,7 +50,6 @@ describe('JobController (e2e)', () => {
   });
 
   afterEach(async () => {
-
     await dataSource.query(`DELETE FROM "_JobToJobSkill"`);
     await dataSource.query(`DELETE FROM "job_skills"`);
     await dataSource.query(`DELETE FROM "jobs"`);
@@ -149,7 +148,9 @@ describe('JobController (e2e)', () => {
 
     // Based on our inserted data, only Job 1 (minAmount: 100000) qualifies.
     expect(response.body.data.length).toBe(1);
-    expect(Number(response.body.data[0].minAmount)).toBeGreaterThanOrEqual(95000);
+    expect(Number(response.body.data[0].minAmount)).toBeGreaterThanOrEqual(
+      95000,
+    );
     expect(response.body.meta.itemCount).toBe(1);
   });
 
@@ -184,7 +185,7 @@ describe('JobController (e2e)', () => {
 
     // Jobs with remote true: Job 1 and Job 3.
     expect(response.body.data.length).toBe(3);
-    expect(response.body.data.every(job => job.remote === true)).toBe(false);
+    expect(response.body.data.every((job) => job.remote === true)).toBe(false);
     expect(response.body.meta.itemCount).toBe(3);
   });
 
@@ -199,8 +200,8 @@ describe('JobController (e2e)', () => {
     expect(Number(response.body.meta.limit)).toBe(2);
     expect(response.body.data.length).toBe(2);
     expect(response.body.meta).toEqual({
-      page: "1",
-      limit: "2",
+      page: '1',
+      limit: '2',
       itemCount: 3,
       pageCount: 2,
       hasNextPage: true,
@@ -221,7 +222,10 @@ describe('JobController (e2e)', () => {
   it('should return correct field selection', async () => {
     const response = await request(app.getHttpServer())
       .get('/job-offers')
-      .query({ fields: 'id,position,providerId,jobType,experience,salaryRange,remote,minAmount,maxAmount,company,location,skills' })
+      .query({
+        fields:
+          'id,position,providerId,jobType,experience,salaryRange,remote,minAmount,maxAmount,company,location,skills',
+      })
       .expect(200);
 
     const job = response.body.data[0];
