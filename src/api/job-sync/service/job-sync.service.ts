@@ -109,7 +109,7 @@ export class JobSyncService {
               normalizedJob.job.companyId = companyId;
               normalizedJob.job.locationId = locationId;
               normalizedJob.job.skillIds = skillIds;
-              normalizedJob.job.remote
+              normalizedJob.job.remote;
               await this.jobService.upsertJob(
                 normalizedJob.job,
                 transactionalEntityManager,

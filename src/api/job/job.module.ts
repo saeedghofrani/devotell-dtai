@@ -6,9 +6,11 @@ import { JobService } from './service/job.service';
 import { CompanyModule } from '../company/company.module';
 import { LocationModule } from '../location/location.module';
 import { SkillModule } from '../skill/skill.module';
+import { JobController } from './controller/job.controller';
 
 @Module({
   imports: [CompanyModule, LocationModule, SkillModule],
+  controllers: [JobController],
   providers: [JobRepository, JobService],
   exports: [JobRepository, JobService],
 })

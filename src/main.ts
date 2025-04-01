@@ -35,8 +35,8 @@ function configureApp(
 
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: false,
-      transformOptions: { enableImplicitConversion: false },
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
       forbidNonWhitelisted: true,
       enableDebugMessages: true,
       disableErrorMessages: false,
