@@ -1,10 +1,9 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DatabaseProviderConstant } from 'src/database/constant/database-provider.constant';
-import { JobEntity } from 'src/database/entities/job.entity';
+import { JobEntity } from './../../../database/entities/job.entity';
 import { DataSource, EntityManager, Repository, SelectQueryBuilder } from 'typeorm';
 import { CreateJobDto } from '../dto/create.dto';
 import { JobFilterDto } from '../dto/filter.dto';
-import { PageDto } from 'src/common/pagination/page.dto';
+import { DatabaseProviderConstant } from './../../../database/constant/database-provider.constant';
 
 @Injectable()
 export class JobRepository extends Repository<JobEntity> {
@@ -54,6 +53,8 @@ export class JobRepository extends Repository<JobEntity> {
         'job.providerId',
         'job.jobType',
         'job.experience',
+        'job.minAmount',
+        'job.maxAmount',
         'job.position',
         'job.salaryRange',
         'job.remote',

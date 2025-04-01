@@ -1,6 +1,6 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { PageDto } from 'src/common/pagination/page.dto';
-import { JobEntity } from 'src/database/entities/job.entity';
+import { PageDto } from './../../../common/pagination/page.dto';
+import { JobEntity } from './../../../database/entities/job.entity';
 import { JobFilterDto } from '../dto/filter.dto';
 import { JobService } from '../service/job.service';
 

@@ -1,5 +1,5 @@
 import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
-import { DevotelConfigService } from 'src/config/devotel/devotel-config.service';
+import { DevotelConfigService } from '../../config/devotel/devotel-config.service';
 import { RequestService } from '../request/request.service';
 import { ISecondProvider } from './interface/second-porvider.interface';
 import { IFirstProvider } from './interface/first-provider.interface';

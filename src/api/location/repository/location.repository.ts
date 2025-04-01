@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DatabaseProviderConstant } from 'src/database/constant/database-provider.constant';
-import { LocationEntity } from 'src/database/entities/location.entity';
+import { DatabaseProviderConstant } from './../../../database/constant/database-provider.constant';
+import { LocationEntity } from './../../../database/entities/location.entity';
 import { DataSource, EntityManager, InsertResult, Repository } from 'typeorm';
 import { CreateLocationDto } from '../dto/create.dto';
 

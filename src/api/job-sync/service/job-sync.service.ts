@@ -1,13 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CompanyService } from 'src/api/company/service/company.service';
-import { JobService } from 'src/api/job/service/job.service';
-import { LocationService } from 'src/api/location/service/location.service';
-import { NormalizationService } from 'src/api/normalization/service/normalization.service';
-import { SkillService } from 'src/api/skill/service/skill.service';
-import { CronWithEnv } from 'src/common/decorator/cron.decorator';
-import { DevotelService } from 'src/external-services/devotel/devotel.service';
-import { IFirstProvider } from 'src/external-services/devotel/interface/first-provider.interface';
-import { ISecondProvider } from 'src/external-services/devotel/interface/second-porvider.interface';
+import { CompanyService } from './../../../api/company/service/company.service';
+import { JobService } from './../../../api/job/service/job.service';
+import { LocationService } from './../../../api/location/service/location.service';
+import { NormalizationService } from './../../../api/normalization/service/normalization.service';
+import { SkillService } from './../../../api/skill/service/skill.service';
+import { CronWithEnv } from './../../../common/decorator/cron.decorator';
+import { DevotelService } from './../../../external-services/devotel/devotel.service';
+import { IFirstProvider } from './../../../external-services/devotel/interface/first-provider.interface';
+import { ISecondProvider } from './../../../external-services/devotel/interface/second-porvider.interface';
 import { EntityManager } from 'typeorm';
 @Injectable()
 export class JobSyncService {

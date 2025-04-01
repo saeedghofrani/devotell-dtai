@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DatabaseProviderConstant } from 'src/database/constant/database-provider.constant';
-import { CompanyEntity } from 'src/database/entities/company.entity';
+import { DatabaseProviderConstant } from './../../../database/constant/database-provider.constant';
+import { CompanyEntity } from './../../../database/entities/company.entity';
 import { DataSource, EntityManager, InsertResult, Repository } from 'typeorm';
 import { CreateCompanyDto } from '../dto/create.dto';
 

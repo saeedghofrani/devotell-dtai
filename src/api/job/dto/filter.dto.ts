@@ -1,6 +1,6 @@
 import { IsBoolean, IsEnum, IsNumber, IsOptional, IsString } from 'class-validator';
-import { BaseFilterDto } from 'src/common/pagination/page-filter.dto';
-import { JobType } from 'src/database/enum/job-type.enum';
+import { BaseFilterDto } from './../../../common/pagination/page-filter.dto';
+import { JobType } from './../../../database/enum/job-type.enum';
 
 export class JobFilterDto extends BaseFilterDto {
     @IsOptional()

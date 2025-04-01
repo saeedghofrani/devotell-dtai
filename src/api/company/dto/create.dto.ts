@@ -1,5 +1,5 @@
 import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
-import { CompanyEntity } from 'src/database/entities/company.entity';
+import { CompanyEntity } from './../../../database/entities/company.entity';
 
 export class CreateCompanyDto implements Partial<CompanyEntity> {
   @IsNotEmpty()

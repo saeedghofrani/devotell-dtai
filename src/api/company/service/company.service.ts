@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { EntityManager, InsertResult } from 'typeorm';
 import { CreateCompanyDto } from '../dto/create.dto';
 import { CompanyRepository } from '../repository/company.repository';
-import { CompanyEntity } from 'src/database/entities/company.entity';
+import { CompanyEntity } from './../../../database/entities/company.entity';
 
 @Injectable()
 export class CompanyService {

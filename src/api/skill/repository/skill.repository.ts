@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@nestjs/common';
-import { DatabaseProviderConstant } from 'src/database/constant/database-provider.constant';
-import { JobSkillEntity } from 'src/database/entities/job-skill.entity';
+import { DatabaseProviderConstant } from './../../../database/constant/database-provider.constant';
+import { JobSkillEntity } from './../../../database/entities/job-skill.entity';
 import {
   DataSource,
   EntityManager,

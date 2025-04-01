@@ -12,12 +12,12 @@ import {
   Max,
   MaxLength,
 } from 'class-validator';
-import { CompanyEntity } from 'src/database/entities/company.entity';
-import { JobSkillEntity } from 'src/database/entities/job-skill.entity';
-import { JobEntity } from 'src/database/entities/job.entity';
-import { LocationEntity } from 'src/database/entities/location.entity';
-import { JobType } from 'src/database/enum/job-type.enum';
-import { ProviderType } from 'src/database/enum/provider-type.enum';
+import { CompanyEntity } from './../../../database/entities/company.entity';
+import { JobSkillEntity } from './../../../database/entities/job-skill.entity';
+import { JobEntity } from './../../../database/entities/job.entity';
+import { LocationEntity } from './../../../database/entities/location.entity';
+import { JobType } from './../../../database/enum/job-type.enum';
+import { ProviderType } from './../../../database/enum/provider-type.enum';
 
 export class CreateJobDto implements Partial<JobEntity> {
   @IsNotEmpty()

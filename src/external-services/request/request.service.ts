@@ -16,7 +16,7 @@ export class RequestService {
           retry(2),
           catchError((error: AxiosError) => {
             this.logger.error(
-              `Request failed: ${error.config.url}`,
+              `Request failed: ${error?.config?.url}`,
               error.message,
             );
             throw error;

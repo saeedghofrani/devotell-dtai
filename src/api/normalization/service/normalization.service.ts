@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateCompanyDto } from 'src/api/company/dto/create.dto';
-import { IFirstProviderJob } from 'src/external-services/devotel/interface/first-provider.interface';
+import { CreateCompanyDto } from './../../../api/company/dto/create.dto';
+import { IFirstProviderJob } from './../../../external-services/devotel/interface/first-provider.interface';
 import { INormalizaedProviderResponse } from '../interface/normalized-provider.interface';
-import { CreateLocationDto } from 'src/api/location/dto/create.dto';
-import { CreateSkillDto } from 'src/api/skill/dto/create.dto';
-import { CreateJobDto } from 'src/api/job/dto/create.dto';
-import { JobType } from 'src/database/enum/job-type.enum';
-import { ProviderType } from 'src/database/enum/provider-type.enum';
-import { ISecondProviderJob } from 'src/external-services/devotel/interface/second-porvider.interface';
-import { formatCompensation } from 'src/tools/format-thousand';
+import { CreateLocationDto } from './../../../api/location/dto/create.dto';
+import { CreateSkillDto } from './../../../api/skill/dto/create.dto';
+import { CreateJobDto } from './../../../api/job/dto/create.dto';
+import { JobType } from './../../../database/enum/job-type.enum';
+import { ProviderType } from './../../../database/enum/provider-type.enum';
+import { ISecondProviderJob } from './../../../external-services/devotel/interface/second-porvider.interface';
+import { formatCompensation } from './../../../tools/format-thousand';
 
 @Injectable()
 export class NormalizationService {

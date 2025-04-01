@@ -1,5 +1,5 @@
 import { Global, Module } from '@nestjs/common';
-import { ConfigurationModule } from 'src/config/config.module';
+import { ConfigurationModule } from './../config/config.module';
 import { PostgresProvider } from './provider/postgres.provider';
 import { DataSource, EntityManager } from 'typeorm';
 import { DatabaseProviderConstant } from './constant/database-provider.constant';
