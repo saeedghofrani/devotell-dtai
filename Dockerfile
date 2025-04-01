@@ -25,4 +25,4 @@ COPY --from=builder /app/.env.development ./
 
 EXPOSE 40000
 
-CMD ["npm", "run", "start:prod"]
+CMD ["node", "dist/main"]
