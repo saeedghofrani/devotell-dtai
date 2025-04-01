@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateCompanyDto } from './../../../api/company/dto/create.dto';
 import { IFirstProviderJob } from './../../../external-services/devotel/interface/first-provider.interface';
 import { INormalizaedProviderResponse } from '../interface/normalized-provider.interface';
@@ -25,8 +25,8 @@ export class NormalizationService {
 
     const [city, state] = firstProviderJob.details?.location?.split(',');
     const location: CreateLocationDto = {
-      city: city,
-      state: state,
+      city: city.trim(),
+      state: state.trim(),
     };
 
     const jobSkills: CreateSkillDto[] = firstProviderJob.skills?.map(
@@ -36,6 +36,9 @@ export class NormalizationService {
     );
 
     const providerId = firstProviderJob.jobId?.split('-').pop();
+    if (!firstProviderJob.details.salaryRange) {
+      throw new BadRequestException('Salary range is required')
+    }
     const [minAmount, maxAmount] = firstProviderJob.details?.salaryRange
       ?.match(/\$(\d+)k/g)
       ?.map((str) => {
