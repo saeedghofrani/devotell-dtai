@@ -7,6 +7,7 @@ import {
 import { NestFactory } from '@nestjs/core';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
+import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { HttpExceptionFilter } from './common/exception-handlers/catch.handler';
 import { AppConfigService } from './config/app/app-config.service';
 
@@ -15,14 +16,16 @@ async function bootstrap(): Promise<void> {
   const appConfigService = app.get(AppConfigService);
 
   configureApp(app, appConfigService);
+  configureSwagger(app, appConfigService);
   await startApp(app, appConfigService);
 }
 
 function configureApp(
-  app: Readonly<INestApplication>,
-  appConfigService: Readonly<AppConfigService>,
+  app: INestApplication,
+  appConfigService: AppConfigService,
 ): void {
   app.setGlobalPrefix(appConfigService.prefix);
+
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',
@@ -36,12 +39,9 @@ function configureApp(
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
-      transformOptions: { enableImplicitConversion: true },
+      whitelist: true,
       forbidNonWhitelisted: true,
       enableDebugMessages: true,
-      disableErrorMessages: false,
-      stopAtFirstError: false,
-      whitelist: true,
     }),
   );
 
@@ -53,7 +53,7 @@ function configureApp(
           scriptSrc: ["'self'", "'unsafe-inline'"],
           objectSrc: ["'none'"],
           upgradeInsecureRequests: [],
-          imgSrc: [`'self'`],
+          imgSrc: ["'self'"],
         },
       },
       referrerPolicy: { policy: 'no-referrer' },
@@ -61,13 +61,26 @@ function configureApp(
   );
 }
 
+function configureSwagger(
+  app: INestApplication,
+  appConfigService: AppConfigService,
+): void {
+  const options = new DocumentBuilder()
+    .setTitle('Customer API')
+    .setDescription('CRUD API for managing customers')
+    .setVersion('1.0')
+    .build();
+  const document = SwaggerModule.createDocument(app, options);
+  SwaggerModule.setup(`${appConfigService.prefix}/v1/docs`, app, document);
+}
+
 async function startApp(
-  app: Readonly<INestApplication>,
-  appConfigService: Readonly<AppConfigService>,
+  app: INestApplication,
+  appConfigService: AppConfigService,
 ): Promise<void> {
   await app.listen(appConfigService.port);
   Logger.log(
-    `Application is running on ${appConfigService.env} envirenment`,
+    `Application is running on ${appConfigService.env} environment`,
     'Bootstrap',
   );
   Logger.log(
@@ -77,7 +90,7 @@ async function startApp(
 }
 
 bootstrap()
-  .then()
+  .then(() => { })
   .catch((error) => {
     Logger.error(error, 'Error starting the application');
     process.exit(1);

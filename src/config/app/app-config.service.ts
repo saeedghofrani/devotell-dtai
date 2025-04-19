@@ -3,7 +3,7 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AppConfigService {
-  public constructor(private readonly configService: ConfigService) {}
+  public constructor(private readonly configService?: ConfigService) {}
 
   public get port(): number {
     return Number(this.configService.get<number>('app.port'));
