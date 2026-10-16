@@ -1,8 +1,25 @@
-# NestJS + TypeORM + PostgreSQL
+# devotell-dtai: job-provider normalization
 
 ## 📌 Project Overview
 
-This is a backend project built using **NestJS** with **TypeORM** as the ORM and **PostgreSQL** as the database. The project follows best practices, including code formatting with **Prettier**, linting with **ESLint**, and a structured migration strategy using **TypeORM** migrations.
+A NestJS integration service that brings two external job-provider payloads into a shared job, company, location, and skills model, then persists the result in PostgreSQL through TypeORM. The public job-offers endpoint exposes the normalized records with filtering and pagination.
+
+## What to inspect
+
+- `src/api/normalization/service/normalization.service.ts`: the two provider mappings.
+- `src/api/job-sync/service/job-sync.service.ts`: per-job transaction boundaries and coordinated upserts.
+- `src/api/job/controller/job.controller.ts`: the job-offers read interface.
+- `src/database/entities` and `src/database/migrations`: persistence model and schema evolution.
+- `src/api/normalization/service/normalization.test.spec.ts`: normalization examples expressed as tests.
+
+```text
+Provider payload -> normalizer -> job/company/location/skill DTOs
+                 -> per-job transaction -> PostgreSQL -> job-offers API
+```
+
+## Scope and limitations
+
+This is an integration project, not a claim of large-scale production operation. Running it requires a local PostgreSQL instance, provider configuration, and appropriate permission to use the external APIs. Scheduled synchronization can make outbound requests; use a local fixture provider when exploring. The current source processes provider batches concurrently; bounded concurrency and operational load characterization would be follow-up work. Repository visibility does not imply a permissive license: package metadata currently declares UNLICENSED.
 
 ## 🚀 Features
 
@@ -22,7 +39,6 @@ This is a backend project built using **NestJS** with **TypeORM** as the ORM and
 /app
 │── src/
 │   ├── api/        # Feature-based modules
-│   ├── controllers/    # Controllers handling requests
 │   ├── common/         # Shared Service
 │   ├── config/         # Configuration Services
 │   ├── database/
@@ -51,8 +67,8 @@ This is a backend project built using **NestJS** with **TypeORM** as the ORM and
 ### Step 1: Clone the repository
 
 ```sh
-git clone <your-repository-url>
-cd <your-repository-name>
+git clone https://github.com/saeedghofrani/devotell-dtai.git
+cd devotell-dtai
 ```
 
 ### Step 2: Install dependencies
@@ -63,13 +79,13 @@ npm install
 
 ### Step 3: Set up environment variables
 
-Create a `.env` file in the root directory and configure the following variables:
+Copy `.env.example` to a local `.env` and `.env.development`, then configure the application, provider URLs, PostgreSQL connection, and both cron schedules. The development script selects `.env.development`. Keep real credentials out of Git. The following is a partial example; use the example file for all required keys:
 
 ```env
 DB_USERNAME=your_db_username
 DB_PASSWORD=your_db_password
 DB_DATABASE=your_database_name
-PORT=40000
+APP_PORT=40000
 ```
 
 ### Step 4: Run the application
@@ -149,7 +165,7 @@ services:
       postgres:
         condition: service_healthy
     healthcheck:
-      test: ['CMD', 'curl', '-f', 'http://localhost:40000/api/v1/health']
+      test: ['CMD', 'curl', '-f', 'http://localhost:40000/api/v1']
       interval: 30s
       timeout: 10s
       retries: 3
@@ -234,7 +250,7 @@ volumes:
 Once the server is running, you can check the health of the service:
 
 ```sh
-curl -f http://localhost:40000/api/v1/health
+curl -f http://localhost:40000/api/v1
 ```
 
 ---
@@ -246,8 +262,8 @@ curl -f http://localhost:40000/api/v1/health
 ✅ **Environment Variable Management** using `.env` files\
 ✅ **Database Migrations** using TypeORM\
 ✅ **Dockerized Application** for easy deployment\
-✅ **Health Checks** for monitoring service uptime\
-✅ **Testing Coverage** with Jest
+✅ **Health endpoint** for checking application availability\
+✅ **Test scripts** using Jest
 
 ---
 
@@ -258,4 +274,3 @@ For questions or support, feel free to reach out!
 ---
 
 ### 🚀 Happy Coding!
-
